@@ -34,13 +34,26 @@
                     <h4>year: {{ movie.year }}</h4>
                     <h4>age restrictions: {{ movie.age_restrictions }}</h4>
                     <h4>trailer: {{ movie.trailer }}</h4>
+                    <br>
+                    <br>
                     <div class="d-flex">
-                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1"
-                            style="max-width: 3rem" />
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                            <i class="bi-cart-fill me-1"></i>
-                            Add to cart
-                        </button>
+                        <table class="table table-dark table-striped">
+                            <tr>
+                                <th>Movie Date</th>
+                                <th>Hall Type</th>
+                                <th>Hall Number</th>
+                                <th>Tickets Left</th>
+                                <th>Price</th>
+                                <th>Buy!</th>
+                            </tr>
+                            {% for screening in screening_time %}
+                            <tr>
+                                <th>{{ screening.screening_time }}</th>
+                                <th>{{ screening.hall_id.type }}</th>
+                                <th>{{ screening.movie_id.movie_name }}</th>
+                            </tr>
+                            {% endfor %}
+                        </table>
                     </div>
                 </div>
             </div>
