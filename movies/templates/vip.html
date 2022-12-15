@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title"> Halls Numbers:{% for hall in halls_list %} {{ hall.hall_number }} {% endfor %}</h5>
+        <p class="card-text">Come and discover the VIP complexes of the Cinema chain and enjoy the perfect entertainment
+            experience that includes a rich dinner, an unlimited cinema buffet and watching a movie in a private cinema
+            hall with pampering armchairs and all in one ticket.
+
+            The VIP guests are invited to arrive at the complex 50 minutes before entering the movie in order to enjoy
+            everything that the VIP complex offers: starting with a rich and changing seasonal menu, with the best
+            seasonal produce and quality ingredients that turn every dish into an experience, a free cinema buffet with
+            hot popcorn and nachos Crispy just the right amount and a variety of decadent and particularly indulgent
+            desserts.
+        </p>
+        <p class="card-text"><small class="text-muted"> * Entry to the VIP complex is accompanied by a parent
+                accompanying each customer under the age of 18. * The menu is subject to change. * The buffet closes
+                half an hour after the start of the last screening.</small></p>
+        <img src="{% static '/images/VIP.jpg' %}" class="card-img-top" alt="...">
+    </div>
+{% endblock %}

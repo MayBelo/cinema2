@@ -23,6 +23,7 @@ urlpatterns = [
     path('',views.movies,name="movies"),
     path('movies/',include('movies.urls')),
     path('genre', views.show_movie_by_genre,name = 'genre'),
-    path('halls',views.show_halls_by_type,name='halls')
+    path('3d',views.show_halls_3d,name='3d'),
+    path('vip',views.show_halls_vip,name='vip'),
 
 ]

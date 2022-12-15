@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -16,7 +15,7 @@
     <link href="{% static 'css/styles.css'%} " rel="stylesheet" />
 </head>
 
-<body>
+<body style="background-color:rgb(68, 73, 74);">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
@@ -52,21 +51,25 @@
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link active" aria-current="page"
-                            href="{% url 'halls'%}?type={{3}}">VIP</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'halls'%}?type={{2}}">3D</a></li>
+                            href="{% url 'vip'%}?type={{3}}">VIP</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url '3d'%}?type={{2}}">3D</a></li>
                     <form class="d-flex" role="search" action="{% url 'movies:search' %}">
                         <input name="my_search" class="form-control me-2" type="search" placeholder="Search"
                             aria-label="Search">
                         <button class="btn btn-secondary" type="submit">Search</button>
                     </form>
+                    {% if user.is_staff %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Add</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'movies:addmovie'%} ">Add Movie</a></li>
+                            <li><a class="dropdown-item" href="{% url 'movies:addhall'%} ">Add Hall</a></li>
+                            <li><a class="dropdown-item" href="{% url 'movies:addscreening'%} ">Add Screening</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
                 </ul>
-                <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
             </div>
         </div>
     </nav>
@@ -84,7 +87,7 @@
     <!-- Footer-->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p>
+            <p class="m-0 text-center text-white">Movie Time &copy; </p>
         </div>
     </footer>
     <!-- Bootstrap core JS-->

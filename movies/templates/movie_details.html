@@ -9,11 +9,8 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>{{movie.name}}</title>
-    <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'css/styles.css'%}" rel="stylesheet" />
 </head>
 
@@ -26,14 +23,14 @@
                 <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0"
                         src="{% static '/images/' %}{{ movie.image }}" alt="..." /></div>
                 <div class="col-md-6">
-                    <h1 class="display-5 fw-bolder">{{ movie.name }}</h1>
+                    <h1 class="display-5 fw-bolder" style="color: white;">{{ movie.name }}</h1>
                     <div class="fs-5 mb-5">
                     </div>
-                    <h2> genre: {{ movie.genre }}</h2>
-                    <h4>length: {{ movie.length }}</h4>
-                    <h4>year: {{ movie.year }}</h4>
-                    <h4>age restrictions: {{ movie.age_restrictions }}</h4>
-                    <h4>trailer: {{ movie.trailer }}</h4>
+                    <h2 style="color: white;"> genre: {{ movie.genre }}</h2>
+                    <h4 style="color: white;">length: {{ movie.length }}</h4>
+                    <h4 style="color: white;">year: {{ movie.year }}</h4>
+                    <h4 style="color: white;">age restrictions: {{ movie.age_restrictions }}</h4>
+                    <h4 style="color: white;">trailer: {{ movie.trailer }}</h4>
                     <br>
                     <br>
                     <div class="d-flex">
@@ -43,14 +40,24 @@
                                 <th>Hall Type</th>
                                 <th>Hall Number</th>
                                 <th>Tickets Left</th>
-                                <th>Price</th>
-                                <th>Buy!</th>
+                                <th>Number Of Tickets</th>
+                                <th>Ticket Price</th>
+                                <th><svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                  </svg></th>
                             </tr>
                             {% for screening in screening_time %}
-                            <tr>
-                                <th>{{ screening.screening_time }}</th>
-                                <th>{{ screening.hall_id.type }}</th>
-                                <th>{{ screening.movie_id.movie_name }}</th>
+                            <form action="{%url 'movies:tickets' screening.id %}" method="POST">
+                                {% csrf_token %}
+                                <tr>
+                                    <th>{{ screening.screening_time }}</th>
+                                    <th>{{ screening.hall_id.hall_name }}</th>
+                                    <th>{{ screening.hall_id.hall_number }}</th>
+                                    <th>{{ screening.tickets_left }}</th>
+                                    <th> <input type="number" name="number_of_tickets"></th>
+                                    <th>{{ screening.hall_id.price }}</th>
+                                    <th><input type="submit" class="btn btn-light" value="buy!"></th>
+                            </form>
                             </tr>
                             {% endfor %}
                         </table>

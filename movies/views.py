@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
 from movies.models import Movie,Hall,Screening
-from movies.forms import MovieForm
+from movies.forms import MovieForm,HallForm,ScreeningForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-import datetime
 from django.utils import timezone
 
 def loginPage(request):
@@ -49,7 +48,7 @@ def register_user(request):
         messages.error(request,'Error')
         return render(request,'register.html',{'form':form})
 
-# @login_required(login_url='login')
+
 def movies(request):
     movie_list = Movie.objects.all()
     context={
@@ -57,25 +56,71 @@ def movies(request):
     }
     return render(request,'movies.html',context)
 
+
 def add_movie(request):
-    context = {
-        'movie_form' : MovieForm(),
+    context= {
+        'movieform':MovieForm(),
     }
-    return render(request,'addmovie.html', context)
+    return render(request,'addmovie.html',context)
+
+def add_screening(request):
+    context= {
+        'screeningform':ScreeningForm(),
+    }
+    return render(request,'addscreening.html',context)
+
+def add_hall(request):
+    context= {
+        'hallform':HallForm(),
+    }
+    return render(request,'addhall.html',context)
+
+def delete_movie(request, pk):
+    movie = Movie.objects.get(id=pk)
+    movie.delete()
+    return redirect('movies:movies')
+
+
+def add_screening_action(request):
+    if request.method == "POST":
+        screeningform = ScreeningForm(request.POST, request.FILES)
+        if screeningform.is_valid():
+                screeningform.instance.tickets_left = screeningform.instance.hall_id.seats
+                screeningform.save()
+                messages.success(request,'screening added successfuly')
+                return redirect('movies:addscreening')
+    else:
+        context= {
+            'screeningform': screeningform,
+        }
+        return render(request,'addscreening.html',context)
 
 def add_movie_action(request):
     if request.method == "POST":
         movieform = MovieForm(request.POST, request.FILES)
         if movieform.is_valid():
             movieform.save()
-            return redirect('movies:movies')
+            messages.success(request,'movie added successfuly')
+            return redirect('movies:addmovie')
     else:
-        context = {
+        context= {
             'movieform': movieform,
         }
-        return render(request, 'addmovie.html', context)
+        return render(request,'addmovie.html',context)
 
-# @login_required(login_url='login')     
+def add_hall_action(request):
+    if request.method == "POST":
+        hallform = HallForm(request.POST, request.FILES)
+        if hallform.is_valid():
+            hallform.save()
+            messages.success(request,'hall added successfuly')
+            return redirect('movies:addhall')
+    else:
+        context= {
+            'hallform': hallform,
+        }
+        return render(request,'addhall.html',context)
+   
 def find_movie(request):
     my_search1 = request.GET.get('my_search')
     movie_list = Movie.objects.filter(name__icontains=my_search1)
@@ -84,7 +129,6 @@ def find_movie(request):
     }
     return render(request, 'movies.html', context=context)
 
-# @login_required(login_url='login')
 def show_movie_by_genre(request):
     genre_search = request.GET.get('genre')
     movie_list = Movie.objects.filter(genre__contains=genre_search)
@@ -93,45 +137,41 @@ def show_movie_by_genre(request):
     }
     return render(request, 'movies.html', context=context)
 
-# @login_required(login_url='login')
-def show_halls_by_type(request):
+
+def movie_details(request, pk):
+    movie = Movie.objects.get(id=pk)
+    screenings_time = Screening.objects.filter(movie_id=movie.id,screening_time__gt=timezone.now())
+    return render(request,'movie_details.html',{'screening_time':screenings_time,'movie':movie})
+
+
+def buy_tickets(request, pk): # this pk should be the screening pk
+    seats = int(request.POST.get('number_of_tickets'))
+    scr1 = Screening.objects.get(id=pk)
+    scr1.tickets_left = scr1.tickets_left - seats
+    scr1.save()
+    price = scr1.hall_id.price
+    payment = int(seats*price)
+    return render(request,'tickets.html',{'payment':payment,'screnning':scr1,'seats':seats})
+
+
+def show_halls_vip(request):
     hall_type = request.GET.get('type')
     halls_list = Hall.objects.filter(type__contains=hall_type)
     context = {
-        'halls_list' : halls_list
+        'halls_list' : halls_list,
+        'hall_type': hall_type
     }
-    return render(request,'halls.html',context=context)
+    return render(request,'vip.html',context=context,)
 
 
-# @login_required(login_url='login')
-def movie_details(request, pk):
-    movie = Movie.objects.get(id=pk)
-    screenings_time = Screening.objects.all()
-    now = timezone.now() 
-    for screening in screenings_time:
-        if screening.screening_time <= now:
-            screening.delete()
-            return render(request,'movie_details.html',{'movie':movie})
-        else:
-            return render(request,'movie_details.html',{'screening_time':screenings_time,'movie':movie})
-
-
-# def show_screening(request):
-#     screenings_time = Screening.objects.all()
-#     for screening in screenings_time:
-#         if screening.screening_time <= datetime.datetime.now():
-#             screening.delete()
-#         else:
-#             return (request,'movie_details.html',{'screening_time':screenings_time})
-    
+def show_halls_3d(request):
+    hall_type = request.GET.get('type')
+    halls_list = Hall.objects.filter(type__contains=hall_type)
+    context = {
+        'halls_list' : halls_list,
+        'hall_type': hall_type
+    }
+    return render(request,'3d.html',context=context,)
 
 
 
-# def tickets_left(request):
-# def buy_ticket(request): 
-# def show_screening(request):
-# def add_screenung(request):
-# def add_hall(request):
-# def delete_screening(request):
-# def delete_movie(request):
-# def delete_hall(movie):

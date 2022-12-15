@@ -6,15 +6,15 @@ from django.contrib.auth.models import User
 class MovieForm(ModelForm):
     class Meta:
         model = Movie
-        fields = ['name', 'genre', 'length', 'year' , 'image' , 'age_restrictions']
+        fields = "__all__"
  
 
 class HallForm(ModelForm):
     class Meta:
         model = Hall 
-        fields = ['hall_number','type','seats','price']
+        fields = "__all__"
 
-class Screening(): 
+class ScreeningForm(ModelForm): 
     class Meta:     
         model = Screening
-        fildes = "__all__"
+        fields = ['movie_id','hall_id','screening_time']

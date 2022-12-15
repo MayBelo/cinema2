@@ -14,9 +14,10 @@ class Hall(models.Model):
     type = models.SmallIntegerField(null=False, default = HallType.basic, choices=HallType.choices)
     seats = models.SmallIntegerField(null=False)
     price = models.IntegerField(null=False)
+    hall_name= models.CharField(max_length=100,null=True)
 
     def __str__(self):
-        return str(self.hall_number),str(self.type)
+        return str(self.hall_number)
 
 
 class Movie(models.Model):
@@ -35,4 +36,5 @@ class Screening(models.Model):
     movie_id = models.ForeignKey(Movie,on_delete=models.CASCADE)
     hall_id= models.ForeignKey(Hall,on_delete=models.CASCADE)
     screening_time =models.DateTimeField()
-    # tickets_left = models.SmallIntegerField(null=False)
+    tickets_left = models.SmallIntegerField(null=False, default=0)
+    

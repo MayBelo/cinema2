@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex">
+    <table class="table table-dark table-striped">
+        <tr>
+            <th>Movie Date</th>
+            <th>Hall Type</th>
+            <th>Hall Number</th>
+            <th> Tickets</th>
+            <th>Totall Price!</th>
+        </tr> 
+        <tr>
+            <th>{{ screnning.screening_time }}</th>
+            <th>{{ screnning.hall_id.hall_name  }}</th>
+            <th>{{  screnning.hall_id.type  }}</th>
+            <th>{{ seats }}</th>
+            <th>{{ payment }}</th>
+        </tr>
+    </table>
+    <h5 ></h5>
+</div>
+{% endblock %}
